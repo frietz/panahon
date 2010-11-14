@@ -33,6 +33,14 @@ void Panahon::init_fields()
     windCondition->setText("");
     iconLabel->setText("");
     mapProgressBar->hide();
+
+    QStringList headers;
+    headers << "Day" << "High (F)" << "Low (F)" << "Condition";
+    forecastTable->setColumnCount(4);
+    forecastTable->setRowCount(4);
+    forecastTable->setHorizontalHeaderLabels(headers);
+    forecastTable->setWindowTitle("Forecast");
+    forecastTable->horizontalHeader()->setStretchLastSection(true);
 }
 
 void Panahon::toggle_search(const QString &text)
@@ -51,44 +59,109 @@ void Panahon::parseDom(QDomDocument &dom)
 {
     QDomElement root = dom.documentElement();
     showResultList(root.elementsByTagName("current_conditions"));
+    forecast(root.elementsByTagName("forecast_conditions"));
 }
 
 void Panahon::showResultList(QDomNodeList nodeList)
 {
     if(nodeList.isEmpty()) return;
 
+    QMap<QString, QString> map;
+    const QDomNode node = nodeList.item(0);
+    QDomNode child = node.firstChild();
+
+    while (!child.isNull()) {
+        const QString tag = child.toElement().tagName();
+        const QString data = child.toElement().attribute("data");
+
+        if (tag == "condition" ||
+            tag == "temp_f" ||
+            tag == "temp_c" ||
+            tag == "humidity" ||
+            tag == "wind_condition" ||
+            tag == "icon")
+            map[tag] = data;
+
+        child = child.nextSibling();
+    }
+
+    currentWeatherCondition(map);
+    showMap();
+}
+
+void Panahon::showMap()
+{
+    mapProgressBar->show();
+    gmap->loadMap(searchLineEdit->text());
+}
+
+void Panahon::currentWeatherCondition(const QMap<QString, QString> map)
+{
+    QMapIterator<QString, QString> i(map);
+    while (i.hasNext()) {
+        i.next();
+        if (i.key() == "condition") conditionData->setText(i.value());
+        if (i.key() == "temp_f") fahrenheit->setText(QString("Temperature: %1%2").arg(i.value()).arg("(F)"));
+        if (i.key() == "temp_c") centigrade->setText(QString("%1%2").arg(i.value()).arg("(C)"));
+        if (i.key() == "humidity") humidity->setText(i.value());
+        if (i.key() == "wind_condition") windCondition->setText(i.value());
+        if (i.key() == "icon") {
+            QString url = QString("http://www.google.com%1").arg(i.value());
+            requestIcon->get(QNetworkRequest(QUrl(url)));
+        }
+    }
+}
+
+void Panahon::forecast(QDomNodeList nodeList)
+{
+    if(nodeList.isEmpty()) return;
+
     for (uint i = 0; i < nodeList.length(); ++i) {
         const QDomNode node = nodeList.item(i);
         QDomNode child = node.firstChild();
+
+        QMap<QString, QString> map;
+
         while (!child.isNull()) {
             const QString tag = child.toElement().tagName();
             const QString data = child.toElement().attribute("data");
-            if (tag == "condition")
-                conditionData->setText(data);
-            if (tag == "temp_f") {
-                QString s = QString("Temperature: %1%2").arg(data).arg("(F)");
-                fahrenheit->setText(s);
-            }
-            if (tag == "temp_c") {
-                QString s = QString("%1%2").arg(data).arg("(C)");
-                centigrade->setText(s);
-            }
-            if (tag == "humidity")
-                humidity->setText(data);
-            if (tag == "wind_condition")
-                windCondition->setText(data);
-            if (tag == "icon") {
-                QString url = QString("http://www.google.com%1").arg(data);
-                requestIcon->get(QNetworkRequest(QUrl(url)));
-            }
+
+            if (tag == "day_of_week" ||
+                tag == "low"  ||
+                tag == "high" ||
+                tag == "icon" ||
+                tag == "condition")
+
+                map[tag] = data;
+
             child = child.nextSibling();
         }
+
+        mapForecast[i] = map;
     }
 
-    const QString s = searchLineEdit->text();
-    QString url = QString("http://maps.google.com/maps/api/staticmap?center=%1&sensor=false&mapType=roadMap&size=511x161").arg(s);
-    mapProgressBar->show();
-    gmap->loadMap(url);
+    QMapIterator<int, QMap<QString, QString> > i(mapForecast);
+    QTableWidgetItem *item;
+    int column;
+    while (i.hasNext()) {
+        i.next();
+        QMap<QString, QString> m = i.value();
+        QMapIterator<QString, QString> j(m);
+        while(j.hasNext()) {
+            j.next();
+            if (j.key() == "icon") continue;
+            item = new QTableWidgetItem(j.value());
+            item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            item->setTextAlignment(Qt::AlignCenter);
+
+            if (j.key() == "day_of_week") column = 0;
+            if (j.key() == "high") column = 1;
+            if (j.key() == "low") column = 2;
+            if (j.key() == "condition") column = 3;
+
+            forecastTable->setItem(i.key(),column,item);
+        }
+    }
 }
 
 void Panahon::getIcon(QNetworkReply *reply)

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>560</height>
+    <height>570</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>20</x>
      <y>10</y>
      <width>551</width>
-     <height>540</height>
+     <height>550</height>
     </rect>
    </property>
    <property name="title">
@@ -29,33 +29,30 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>168</y>
+      <y>163</y>
       <width>531</width>
-      <height>150</height>
+      <height>170</height>
      </rect>
     </property>
     <property name="title">
      <string>Forecast</string>
     </property>
-    <widget class="QListView" name="listView">
+    <widget class="QTableWidget" name="forecastTable">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>20</y>
-       <width>511</width>
-       <height>120</height>
+       <y>22</y>
+       <width>510</width>
+       <height>140</height>
       </rect>
      </property>
     </widget>
-    <zorder>listView</zorder>
-    <zorder>frame_2</zorder>
-    <zorder>frame</zorder>
    </widget>
    <widget class="QGroupBox" name="groupBox_4">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>317</y>
+      <y>332</y>
       <width>531</width>
       <height>210</height>
      </rect>
@@ -97,7 +94,7 @@
     <property name="geometry">
      <rect>
       <x>17</x>
-      <y>28</y>
+      <y>23</y>
       <width>400</width>
       <height>34</height>
      </rect>
@@ -126,7 +123,7 @@
     <property name="geometry">
      <rect>
       <x>412</x>
-      <y>28</y>
+      <y>23</y>
       <width>121</width>
       <height>34</height>
      </rect>
@@ -195,7 +192,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>100</x>
@@ -260,7 +257,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>100</x>
@@ -298,22 +295,14 @@
       </item>
      </layout>
     </widget>
-    <zorder>frame</zorder>
-    <zorder></zorder>
-    <zorder></zorder>
-    <zorder>humidity</zorder>
-    <zorder>windCondition</zorder>
    </widget>
-   <zorder>layoutWidget</zorder>
+   <zorder>groupBox_2</zorder>
    <zorder>groupBox_3</zorder>
    <zorder>groupBox_4</zorder>
    <zorder>searchLineEdit</zorder>
    <zorder>searchPushButton</zorder>
-   <zorder>searchLineEdit</zorder>
-   <zorder>searchPushButton</zorder>
-   <zorder>frame</zorder>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -324,7 +313,7 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>0</x>

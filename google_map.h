@@ -8,7 +8,7 @@ class GoogleMap : public QWebView
 
 public:
     GoogleMap(QWidget *parent = 0);    
-    void loadMap(const QString &url);
+    void loadMap(const QString &args);
 private:    
 
 };

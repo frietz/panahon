@@ -28,14 +28,20 @@ private slots:
     void parseWeatherDetails(QNetworkReply *reply);
     void getIcon(QNetworkReply *reply);
 
-private:    
+private:
+    void currentWeatherCondition(const QMap<QString, QString> map);
+    void showMap();
+
     QNetworkAccessManager *searchLocation;
     QNetworkAccessManager *requestWeatherDetails;    
     QNetworkAccessManager *requestIcon;
 
     void init_fields();
     void showResultList(QDomNodeList nodeList);
+    void forecast(QDomNodeList nodeList);
     void parseDom(QDomDocument &dom);
+
+    QMap<int, QMap<QString, QString> > mapForecast;
 
 };
 

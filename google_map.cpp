@@ -6,9 +6,10 @@ GoogleMap::GoogleMap(QWidget *parent)
 {
 }
 
-void GoogleMap::loadMap(const QString &url)
+void GoogleMap::loadMap(const QString &args)
 {
-    if (url.isEmpty()) return;
+    if (args.isEmpty()) return;
+    QString url = QString("http://maps.google.com/maps/api/staticmap?center=%1&sensor=false&mapType=roadMap&size=511x161").arg(args);
     load(QUrl(url));
     show();
 }
