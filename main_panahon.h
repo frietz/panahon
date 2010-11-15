@@ -27,8 +27,7 @@ private:
     Panahon *mainWidget;
 
     QAction *panahonQuitAction;
-    QAction *helpAboutPanahonAction;
-    QAction *helpAboutQtAction;
+    QAction *helpAboutPanahonAction;    
 
     void createActions();
     void createStatusBar();

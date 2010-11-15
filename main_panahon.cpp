@@ -43,9 +43,6 @@ void MainPanahon::createActions()
     helpAboutPanahonAction->setStatusTip(tr("About Panahon"));
     connect(helpAboutPanahonAction, SIGNAL(triggered()), this, SLOT(aboutPanahon()));
 
-    helpAboutQtAction = new QAction(tr("About &Qt..."), this);
-    helpAboutQtAction->setStatusTip(tr("Show the Qt library's About box."));
-    connect(helpAboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 }
 
 void MainPanahon::setupMenuBar()
@@ -58,8 +55,7 @@ void MainPanahon::setupMenuBar()
     helpMenu->addAction(tr("Index"));
     helpMenu->addAction(tr("Context Help"));
     helpMenu->addSeparator();    
-    helpMenu->addAction(helpAboutPanahonAction);
-    helpMenu->addAction(helpAboutQtAction);
+    helpMenu->addAction(helpAboutPanahonAction);    
 }
 
 void MainPanahon::createStatusBar()
@@ -90,8 +86,7 @@ void MainPanahon::closeEvent(QCloseEvent *event)
 void MainPanahon::setupTrayIcon()
 {
     panahonTrayIconMenu = new QMenu(this);
-    panahonTrayIconMenu->addAction(helpAboutPanahonAction);
-    panahonTrayIconMenu->addAction(helpAboutQtAction);
+    panahonTrayIconMenu->addAction(helpAboutPanahonAction);    
     panahonTrayIconMenu->addSeparator();
     panahonTrayIconMenu->addAction(panahonQuitAction);
 

@@ -9,22 +9,20 @@ Panahon::Panahon(QWidget *parent)
 
     searchPushButton->setEnabled(false);    
 
-    searchLocation = new QNetworkAccessManager(this);
-    requestWeatherDetails = new QNetworkAccessManager(this);
+    requestLocation = new QNetworkAccessManager(this);
     requestIcon = new QNetworkAccessManager(this);
 
-    connect(searchLocation, SIGNAL(finished(QNetworkReply*)),this, SLOT(parseSearchLocation(QNetworkReply*)));
-    connect(requestWeatherDetails, SIGNAL(finished(QNetworkReply*)),this, SLOT(parseWeatherDetails(QNetworkReply*)));
+    connect(requestLocation, SIGNAL(finished(QNetworkReply*)),this, SLOT(getLocation(QNetworkReply*)));
     connect(requestIcon, SIGNAL(finished(QNetworkReply*)), SLOT(getIcon(QNetworkReply*)));
     connect(gmap, SIGNAL(loadProgress(int)), mapProgressBar, SLOT(setValue(int)));
-    connect(searchLineEdit, SIGNAL(textChanged(QString)),SLOT(toggle_search(QString)));
+    connect(searchLineEdit, SIGNAL(textChanged(QString)),SLOT(toggleSearch(QString)));
     connect(searchLineEdit, SIGNAL(returnPressed()),SLOT(search()));
     connect(searchPushButton, SIGNAL(clicked()), SLOT(search()));
 
-    init_fields();
+    initWidgets();
 }
 
-void Panahon::init_fields()
+void Panahon::initWidgets()
 {
     conditionData->setText("");
     humidity->setText("");
@@ -43,7 +41,7 @@ void Panahon::init_fields()
     forecastTable->horizontalHeader()->setStretchLastSection(true);
 }
 
-void Panahon::toggle_search(const QString &text)
+void Panahon::toggleSearch(const QString &text)
 {    
     searchPushButton->setEnabled(!text.isEmpty());
 }
@@ -52,17 +50,17 @@ void Panahon::search()
 {
     QString s = searchLineEdit->text();
     QString url = QString("http://www.google.com/ig/api?weather=%1").arg(s);
-    searchLocation->get(QNetworkRequest(QUrl(url)));
+    requestLocation->get(QNetworkRequest(QUrl(url)));
 }
 
 void Panahon::parseDom(QDomDocument &dom)
 {
     QDomElement root = dom.documentElement();
-    showResultList(root.elementsByTagName("current_conditions"));
-    forecast(root.elementsByTagName("forecast_conditions"));
+    getCurrentCondition(root.elementsByTagName("current_conditions"));
+    getForecast(root.elementsByTagName("forecast_conditions"));
 }
 
-void Panahon::showResultList(QDomNodeList nodeList)
+void Panahon::getCurrentCondition(QDomNodeList nodeList)
 {
     if(nodeList.isEmpty()) return;
 
@@ -85,18 +83,6 @@ void Panahon::showResultList(QDomNodeList nodeList)
         child = child.nextSibling();
     }
 
-    currentWeatherCondition(map);
-    showMap();
-}
-
-void Panahon::showMap()
-{
-    mapProgressBar->show();
-    gmap->loadMap(searchLineEdit->text());
-}
-
-void Panahon::currentWeatherCondition(const QMap<QString, QString> map)
-{
     QMapIterator<QString, QString> i(map);
     while (i.hasNext()) {
         i.next();
@@ -110,9 +96,17 @@ void Panahon::currentWeatherCondition(const QMap<QString, QString> map)
             requestIcon->get(QNetworkRequest(QUrl(url)));
         }
     }
+
+    showMap();
 }
 
-void Panahon::forecast(QDomNodeList nodeList)
+void Panahon::showMap()
+{
+    mapProgressBar->show();
+    gmap->loadMap(searchLineEdit->text());
+}
+
+void Panahon::getForecast(QDomNodeList nodeList)
 {
     if(nodeList.isEmpty()) return;
 
@@ -175,7 +169,7 @@ void Panahon::getIcon(QNetworkReply *reply)
     }
 }
 
-void Panahon::parseSearchLocation(QNetworkReply *reply)
+void Panahon::getLocation(QNetworkReply *reply)
 {
     QDomDocument doc("doc");
     if(!doc.setContent(reply))
@@ -186,16 +180,4 @@ void Panahon::parseSearchLocation(QNetworkReply *reply)
         return;
 
     parseDom(doc);
-}
-
-void Panahon::parseWeatherDetails(QNetworkReply *reply)
-{
-    QDomDocument doc("doc");
-    if(!doc.setContent(reply))
-        return;
-
-    QDomElement root = doc.documentElement();
-    if (root.tagName() != "weather")
-        return;
-
 }

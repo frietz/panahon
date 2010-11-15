@@ -21,24 +21,21 @@ public:
     Panahon(QWidget *parent = 0);    
 
 private slots:
-    void toggle_search(const QString &text);
+    void toggleSearch(const QString &text);
     void search();
 
-    void parseSearchLocation(QNetworkReply *reply);
-    void parseWeatherDetails(QNetworkReply *reply);
+    void getLocation(QNetworkReply *reply);
     void getIcon(QNetworkReply *reply);
 
-private:
-    void currentWeatherCondition(const QMap<QString, QString> map);
+private:    
     void showMap();
 
-    QNetworkAccessManager *searchLocation;
-    QNetworkAccessManager *requestWeatherDetails;    
+    QNetworkAccessManager *requestLocation;
     QNetworkAccessManager *requestIcon;
 
-    void init_fields();
-    void showResultList(QDomNodeList nodeList);
-    void forecast(QDomNodeList nodeList);
+    void initWidgets();
+    void getCurrentCondition(QDomNodeList nodeList);
+    void getForecast(QDomNodeList nodeList);
     void parseDom(QDomDocument &dom);
 
     QMap<int, QMap<QString, QString> > mapForecast;
