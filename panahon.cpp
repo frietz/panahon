@@ -62,13 +62,13 @@ void Panahon::initWidgets()
     iconLabel->setText("");
     mapProgressBar->hide();
 
-    QStringList headers;
-    headers << "Day" << "High (F)" << "Low (F)" << "Condition";
+    QStringList headers = (QStringList() << "Day" << "High (F)" << "Low (F)" << "Condition");
+
     forecastTable->setColumnCount(4);
     forecastTable->setRowCount(4);
     forecastTable->setHorizontalHeaderLabels(headers);
     forecastTable->setWindowTitle("Forecast");
-    forecastTable->horizontalHeader()->setStretchLastSection(true);    
+    forecastTable->horizontalHeader()->setStretchLastSection(true);
 }
 
 void Panahon::toggleSearch(const QString &text)
@@ -98,16 +98,14 @@ void Panahon::getCurrentCondition(QDomNodeList nodeList)
     const QDomNode node = nodeList.item(0);
     QDomNode child = node.firstChild();
 
+    QStringList list;
+    list << tags[CONDITION] << tags[TEMP_F] << tags[TEMP_C] << tags[HUMIDITY] << tags[WIND_CONDITION] << tags[ICON];
+
     while (!child.isNull()) {
         const QString tag = child.toElement().tagName();
         const QString data = child.toElement().attribute("data");
 
-        if (tag == tags[CONDITION] ||
-            tag == tags[TEMP_F] ||
-            tag == tags[TEMP_C] ||
-            tag == tags[HUMIDITY] ||
-            tag == tags[WIND_CONDITION] ||
-            tag == tags[ICON])
+        if (list.contains(tag))
             map[tag] = data;
 
         child = child.nextSibling();
@@ -140,6 +138,9 @@ void Panahon::getForecast(QDomNodeList nodeList)
 {
     if(nodeList.isEmpty()) return;
 
+    QStringList list;
+    list << tags[DAY_OF_WEEK] << tags[LOW] << tags[HIGH] << tags[ICON] << tags[CONDITION];
+
     for (uint i = 0; i < nodeList.length(); ++i) {
         const QDomNode node = nodeList.item(i);
         QDomNode child = node.firstChild();
@@ -150,12 +151,7 @@ void Panahon::getForecast(QDomNodeList nodeList)
             const QString tag = child.toElement().tagName();
             const QString data = child.toElement().attribute("data");
 
-            if (tag == tags[DAY_OF_WEEK] ||
-                tag == tags[LOW]  ||
-                tag == tags[HIGH] ||
-                tag == tags[ICON] ||
-                tag == tags[CONDITION])
-
+            if (list.contains(tag))
                 map[tag] = data;
 
             child = child.nextSibling();
