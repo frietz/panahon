@@ -173,7 +173,7 @@ void Panahon::getForecast(QDomNodeList nodeList)
         QMapIterator<QString, QString> j(m);
         while(j.hasNext()) {
             j.next();
-            if (j.key() == "icon") continue;
+            if (j.key() == tags[ICON]) continue;
             item = new QTableWidgetItem(j.value());
             item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             item->setTextAlignment(Qt::AlignCenter);
