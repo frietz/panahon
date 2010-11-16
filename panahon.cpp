@@ -40,6 +40,16 @@ Panahon::Panahon(QWidget *parent)
     connect(searchPushButton, SIGNAL(clicked()), SLOT(search()));
 
     initWidgets();
+
+    tags.insert(DAY_OF_WEEK, "day_of_week");
+    tags.insert(HIGH, "high");
+    tags.insert(LOW, "low");
+    tags.insert(CONDITION, "condition");
+    tags.insert(TEMP_F, "temp_f");
+    tags.insert(TEMP_C, "temp_c");
+    tags.insert(HUMIDITY, "humidity");
+    tags.insert(WIND_CONDITION, "wind_condition");
+    tags.insert(ICON, "icon");
 }
 
 void Panahon::initWidgets()
@@ -58,7 +68,7 @@ void Panahon::initWidgets()
     forecastTable->setRowCount(4);
     forecastTable->setHorizontalHeaderLabels(headers);
     forecastTable->setWindowTitle("Forecast");
-    forecastTable->horizontalHeader()->setStretchLastSection(true);
+    forecastTable->horizontalHeader()->setStretchLastSection(true);    
 }
 
 void Panahon::toggleSearch(const QString &text)
@@ -92,12 +102,12 @@ void Panahon::getCurrentCondition(QDomNodeList nodeList)
         const QString tag = child.toElement().tagName();
         const QString data = child.toElement().attribute("data");
 
-        if (tag == "condition" ||
-            tag == "temp_f" ||
-            tag == "temp_c" ||
-            tag == "humidity" ||
-            tag == "wind_condition" ||
-            tag == "icon")
+        if (tag == tags[CONDITION] ||
+            tag == tags[TEMP_F] ||
+            tag == tags[TEMP_C] ||
+            tag == tags[HUMIDITY] ||
+            tag == tags[WIND_CONDITION] ||
+            tag == tags[ICON])
             map[tag] = data;
 
         child = child.nextSibling();
@@ -106,12 +116,12 @@ void Panahon::getCurrentCondition(QDomNodeList nodeList)
     QMapIterator<QString, QString> i(map);
     while (i.hasNext()) {
         i.next();
-        if (i.key() == "condition") conditionData->setText(i.value());
-        if (i.key() == "temp_f") fahrenheit->setText(QString("Temperature: %1%2").arg(i.value()).arg("(F)"));
-        if (i.key() == "temp_c") centigrade->setText(QString("%1%2").arg(i.value()).arg("(C)"));
-        if (i.key() == "humidity") humidity->setText(i.value());
-        if (i.key() == "wind_condition") windCondition->setText(i.value());
-        if (i.key() == "icon") {
+        if (i.key() == tags[CONDITION]) conditionData->setText(i.value());
+        if (i.key() == tags[TEMP_F]) fahrenheit->setText(QString("Temperature: %1%2").arg(i.value()).arg("(F)"));
+        if (i.key() == tags[TEMP_C]) centigrade->setText(QString("%1%2").arg(i.value()).arg("(C)"));
+        if (i.key() == tags[HUMIDITY]) humidity->setText(i.value());
+        if (i.key() == tags[WIND_CONDITION]) windCondition->setText(i.value());
+        if (i.key() == tags[ICON]) {
             QString url = QString("http://www.google.com%1").arg(i.value());
             requestIcon->get(QNetworkRequest(QUrl(url)));
         }
@@ -140,11 +150,11 @@ void Panahon::getForecast(QDomNodeList nodeList)
             const QString tag = child.toElement().tagName();
             const QString data = child.toElement().attribute("data");
 
-            if (tag == "day_of_week" ||
-                tag == "low"  ||
-                tag == "high" ||
-                tag == "icon" ||
-                tag == "condition")
+            if (tag == tags[DAY_OF_WEEK] ||
+                tag == tags[LOW]  ||
+                tag == tags[HIGH] ||
+                tag == tags[ICON] ||
+                tag == tags[CONDITION])
 
                 map[tag] = data;
 
@@ -168,10 +178,10 @@ void Panahon::getForecast(QDomNodeList nodeList)
             item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             item->setTextAlignment(Qt::AlignCenter);
 
-            if (j.key() == "day_of_week") column = 0;
-            if (j.key() == "high") column = 1;
-            if (j.key() == "low") column = 2;
-            if (j.key() == "condition") column = 3;
+            if (j.key() == tags[DAY_OF_WEEK]) column = DAY_OF_WEEK;
+            if (j.key() == tags[HIGH]) column = HIGH;
+            if (j.key() == tags[LOW]) column = LOW;
+            if (j.key() == tags[CONDITION]) column = CONDITION;
 
             forecastTable->setItem(i.key(),column,item);
         }

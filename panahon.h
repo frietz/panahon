@@ -59,6 +59,9 @@ private:
     void parseDom(QDomDocument &dom);
 
     QMap<int, QMap<QString, QString> > mapForecast;
+    QMap<int, QString> tags;
+
+    enum { DAY_OF_WEEK, HIGH, LOW, CONDITION, ICON, TEMP_F, TEMP_C, HUMIDITY, WIND_CONDITION };
 
 };
 
