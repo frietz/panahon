@@ -28,8 +28,15 @@ GoogleMap::GoogleMap(QWidget *parent)
 
 void GoogleMap::loadMap(const QString &args)
 {
-    if (args.isEmpty()) return;
-    QString url = QString("http://maps.google.com/maps/api/staticmap?center=%1&sensor=false&mapType=roadMap&size=511x161").arg(args);
+    if (args.isEmpty()) return;    
+    QString url = QString("http://maps.google.com/maps/api/" \
+                          "staticmap?center=%1" \
+                          "&markers=color:%2|%3&sensor=false" \
+                          "&mapType=roadMap&size=%4")
+                          .arg(args)
+                          .arg("blue")
+                          .arg(args)
+                          .arg("511x161");
     load(QUrl(url));
     show();
 }
