@@ -60,6 +60,8 @@ private:
 
     QMap<int, QMap<QString, QString> > mapForecast;
     QMap<int, QString> tags;
+    QMap<QString, QString> parseTags(QDomNodeList nodeList, QStringList list);
+    QMap<QString, QString> parseTags(QDomNode node, QStringList list);
 
     enum { DAY_OF_WEEK, HIGH, LOW, CONDITION, ICON, TEMP_F, TEMP_C, HUMIDITY, WIND_CONDITION };
 

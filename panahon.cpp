@@ -94,23 +94,10 @@ void Panahon::getCurrentCondition(QDomNodeList nodeList)
 {
     if(nodeList.isEmpty()) return;
 
-    QMap<QString, QString> map;
-    const QDomNode node = nodeList.item(0);
-    QDomNode child = node.firstChild();
-
     QStringList list;
     list << tags[CONDITION] << tags[TEMP_F] << tags[TEMP_C] << tags[HUMIDITY] << tags[WIND_CONDITION] << tags[ICON];
 
-    while (!child.isNull()) {
-        const QString tag = child.toElement().tagName();
-        const QString data = child.toElement().attribute("data");
-
-        if (list.contains(tag))
-            map[tag] = data;
-
-        child = child.nextSibling();
-    }
-
+    QMap<QString, QString> map = parseTags(nodeList, list);
     QMapIterator<QString, QString> i(map);
     while (i.hasNext()) {
         i.next();
@@ -128,6 +115,42 @@ void Panahon::getCurrentCondition(QDomNodeList nodeList)
     showMap();
 }
 
+QMap<QString, QString> Panahon::parseTags(QDomNodeList nodeList, QStringList list)
+{
+    QMap<QString, QString> map;
+    const QDomNode node = nodeList.item(0);
+    QDomNode child = node.firstChild();
+
+    while (!child.isNull()) {
+        const QString tag = child.toElement().tagName();
+        const QString data = child.toElement().attribute("data");
+
+        if (list.contains(tag))
+            map[tag] = data;
+
+        child = child.nextSibling();
+    }
+
+    return map;
+}
+
+QMap<QString, QString> Panahon::parseTags(QDomNode node, QStringList list)
+{
+    QMap<QString, QString> map;
+    QDomNode child = node.firstChild();
+    while (!child.isNull()) {
+        const QString tag = child.toElement().tagName();
+        const QString data = child.toElement().attribute("data");
+
+        if (list.contains(tag))
+            map[tag] = data;
+
+        child = child.nextSibling();
+    }
+
+    return map;
+}
+
 void Panahon::showMap()
 {
     mapProgressBar->show();
@@ -141,23 +164,8 @@ void Panahon::getForecast(QDomNodeList nodeList)
     QStringList list;
     list << tags[DAY_OF_WEEK] << tags[LOW] << tags[HIGH] << tags[ICON] << tags[CONDITION];
 
-    for (uint i = 0; i < nodeList.length(); ++i) {
-        const QDomNode node = nodeList.item(i);
-        QDomNode child = node.firstChild();
-
-        QMap<QString, QString> map;
-
-        while (!child.isNull()) {
-            const QString tag = child.toElement().tagName();
-            const QString data = child.toElement().attribute("data");
-
-            if (list.contains(tag))
-                map[tag] = data;
-
-            child = child.nextSibling();
-        }
-
-        mapForecast[i] = map;
+    for (uint i = 0; i < nodeList.length(); ++i) {        
+        mapForecast[i] = parseTags(nodeList.item(i), list);
     }
 
     QMapIterator<int, QMap<QString, QString> > i(mapForecast);
