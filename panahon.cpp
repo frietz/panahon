@@ -60,6 +60,7 @@ void Panahon::initWidgets()
     centigrade->setText("");
     windCondition->setText("");
     iconLabel->setText("");
+    searchLineEdit->setFocus();
     mapProgressBar->hide();
 
     QStringList headers = (QStringList() << "Day" << "High (F)" << "Low (F)" << "Condition");
@@ -205,6 +206,15 @@ void Panahon::getIcon(QNetworkReply *reply)
 
 void Panahon::getLocation(QNetworkReply *reply)
 {
+    if (reply->error() != QNetworkReply::NoError)
+    {
+        QMessageBox::critical(this,tr("Network Error"),
+                              tr("A network error was encountered " \
+                                 "while retrieving weather data. Please check " \
+                                 "your internet connection. Thank you."));
+        return;
+    }
+
     QDomDocument doc("doc");
     if(!doc.setContent(reply))
         return;
