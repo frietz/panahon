@@ -42,9 +42,9 @@ MainPanahon::MainPanahon(QWidget *parent)
 
     setWindowTitle(tr(":: Panahon"));
     setWindowIcon(QIcon(":/images/panahon.png"));
-    setMinimumSize(600,580);
-    setMaximumSize(600,580);
-    resize(600,580);
+    setMinimumSize(600,590);
+    setMaximumSize(600,590);
+    resize(600,590);
 
     QRect rect = frameGeometry();
     rect.moveCenter(QDesktopWidget().availableGeometry().center());
