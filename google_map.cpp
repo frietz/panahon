@@ -32,11 +32,12 @@ void GoogleMap::loadMap(const QString &args)
     QString url = QString("http://maps.google.com/maps/api/" \
                           "staticmap?center=%1" \
                           "&markers=color:%2|%3&sensor=false" \
-                          "&mapType=roadMap&size=%4")
+                          "&mapType=roadMap&size=%4x%5")
                           .arg(args)
                           .arg("blue")
                           .arg(args)
-                          .arg("511x161");
+                          .arg(this->width())
+                          .arg(this->height());
     load(QUrl(url));
     show();
 }
