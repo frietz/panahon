@@ -22,17 +22,22 @@
 #include <QtGui>
 
 #include "main_panahon.h"
+#include "src/qtsingleapplication.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    QtSingleApplication app(argc, argv);
+    if (app.isRunning())
+        return 0;
+
     app.setApplicationName(app.translate("main","Pana-panahon"));
     app.setOrganizationName("****");
-    app.setOrganizationDomain("Pasig");    
+    app.setOrganizationDomain("Pasig");
 
     app.setQuitOnLastWindowClosed(false);
 
     MainPanahon *mainPanahon = new MainPanahon;
+    app.setActivationWindow(mainPanahon);
     mainPanahon->show();
 
     return app.exec();
