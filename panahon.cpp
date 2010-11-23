@@ -171,7 +171,7 @@ void Panahon::getForecast(QDomNodeList nodeList)
 
     QMapIterator<int, QMap<QString, QString> > i(mapForecast);
     QTableWidgetItem *item;
-    int column;
+
     while (i.hasNext()) {
         i.next();
         QMap<QString, QString> m = i.value();
@@ -183,6 +183,7 @@ void Panahon::getForecast(QDomNodeList nodeList)
             item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             item->setTextAlignment(Qt::AlignCenter);
 
+            int column = -1;
             if (j.key() == tags[DAY_OF_WEEK]) column = DAY_OF_WEEK;
             if (j.key() == tags[HIGH]) column = HIGH;
             if (j.key() == tags[LOW]) column = LOW;
