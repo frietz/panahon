@@ -19,6 +19,7 @@
  */
 
 #include <QtGui>
+#include <QPixmap>
 #include "panahon.h"
 #include "google_map.h"
 
@@ -103,8 +104,8 @@ void Panahon::getCurrentCondition(QDomNodeList nodeList)
     while (i.hasNext()) {
         i.next();
         if (i.key() == tags[CONDITION]) conditionData->setText(i.value());
-        if (i.key() == tags[TEMP_F]) fahrenheit->setText(QString("Temperature: %1%2").arg(i.value()).arg("(F)"));
-        if (i.key() == tags[TEMP_C]) centigrade->setText(QString("%1%2").arg(i.value()).arg("(C)"));
+        if (i.key() == tags[TEMP_F]) fahrenheit->setText(QString("Temperature: %1%2").arg(i.value()).arg("F / "));
+        if (i.key() == tags[TEMP_C]) centigrade->setText(QString("%1%2").arg(i.value()).arg("C"));
         if (i.key() == tags[HUMIDITY]) humidity->setText(i.value());
         if (i.key() == tags[WIND_CONDITION]) windCondition->setText(i.value());
         if (i.key() == tags[ICON]) {
@@ -197,7 +198,7 @@ void Panahon::getForecast(QDomNodeList nodeList)
 void Panahon::getIcon(QNetworkReply *reply)
 {
     QByteArray ba(reply->readAll());
-    QPixmap pixmap = QPixmap(90, 70);
+    QPixmap pixmap = QPixmap(iconLabel->width(), iconLabel->height());
     if (pixmap.loadFromData(ba)) {
         iconLabel->setPixmap(pixmap);
         iconLabel->sizeHint();
