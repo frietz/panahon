@@ -9,19 +9,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>493</width>
     <height>250</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>400</width>
+    <width>493</width>
     <height>250</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>400</width>
+    <width>493</width>
     <height>250</height>
    </size>
   </property>
@@ -31,8 +31,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>210</y>
+     <x>370</x>
+     <y>200</y>
      <width>85</width>
      <height>27</height>
     </rect>
@@ -49,12 +49,12 @@
     <rect>
      <x>60</x>
      <y>70</y>
-     <width>230</width>
+     <width>388</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>Panahon is a simple weather app.</string>
+    <string>Panahon is a simple weather application written in C++.</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -94,6 +94,32 @@
    </property>
    <property name="scaledContents">
     <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>110</y>
+     <width>240</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Email: frietz_osorio [at] yahoo.com</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>130</y>
+     <width>270</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Url: https://github.com/frietz/panahon</string>
    </property>
   </widget>
  </widget>
