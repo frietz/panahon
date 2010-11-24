@@ -22,3 +22,11 @@ SOURCES += about_panahon.cpp \
 
 RESOURCES += panahon.qrc
 QT += network xml webkit
+
+OTHER_FILES += \
+    panahon.sh \
+    app.rc
+
+#ifdef Q_WS_WIN
+RC_FILE = app.rc
+#endif
