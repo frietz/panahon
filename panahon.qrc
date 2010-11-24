@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>images/exit.png</file>
         <file>images/panahon.png</file>
-        <file>images/rss.png</file>
         <file>images/icon_search.png</file>
     </qresource>
 </RCC>
